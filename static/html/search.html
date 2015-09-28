@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>华米考勤系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/dateRange.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">华米考勤系统</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span> 主界面</a></li>
+                <li class="active"><a href="#"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> 汪少伟 <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">个人信息</a></li>
+                    <li><a href="#">退出</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+    </nav>
+    <div class="top-space"></div>
+    <div class="container-fluid">
+        <div class="jumbotron">
+            <h3>查询员工考勤记录 <small> 按以下条件查询</small></h3>
+            <hr>
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="users">姓名</label>
+                    <select class="form-control" name="users" id="users">
+                        <option value="0">所有人</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">　日期选择</label>
+                    <input type="text" class="form-control" id="date" placeholder="2015-08-01 至 2015-08-31" style="width:200px;">
+                </div>
+                　<button id="btnSearch" type="submit" class="btn btn-default">查询</button>
+            </div>
+        </div>
+
+        <table id="showContant" class="table table-bordered hidden">
+            <thead>
+                <tr>
+                    <th>员工ID</th>
+                    <th>员工姓名</th>
+                    <th>日期</th>
+                    <th>上班</th>
+                    <th>下班</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+
+    <!-- Tips Modal -->
+    <div class="modal fade bs-example-modal-sm" id="Tips" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">系统提示</h4>
+            </div>
+          <div class="modal-body text-center" style="color:#F00;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/dateRange.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+    // 定义接口
+    var getUserapi = './testapi/user.json'; //获取员工信息
+        postSearchapi = './testapi/search.json'; //提交搜索条件
+
+    //搜索变量
+    var userId = 0; //选择员工id
+        userName = '所有人'; //选择员工姓名
+        sdate = ''; //开始时间
+        edate = ''; //结束时间
+
+    //加载员工列表
+    $.ajax({
+        type:'get',    
+        url:getUserapi,
+        dataType:'json',
+        success:function(data){
+            $.each(data, function(i) {
+                $('#users').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+            });
+        },
+        error : function(err){
+            console.log(err);
+        }
+    });
+
+    // 选择员工
+    $('#users').change(function() {
+        userId = this.value;
+        userName = $(this).find("option:selected").text();
+    });
+
+    //日期选择
+    var dateRange1 = new pickerDateRange('date', {
+        isTodayValid : true,
+        needCompare : false,
+        defaultText : ' 至 ',
+        autoSubmit : true,
+        theme : 'ta',
+        success : function(obj) {
+            sdate = obj.startDate;
+            edate = obj.endDate;
+        }
+    });
+
+    // 查询
+    $('#btnSearch').click(function() {
+        if(sdate=='' || edate==''){
+            $('#Tips').modal().find('.modal-body').text('请选择时间段');  //验证
+        }else{
+
+            $('#showContant').removeClass('hidden');
+            var showContant = $('#showContant').find('tbody');
+            showContant.html("加载中...");
+            $.ajax({
+                type:'get',    
+                url:postSearchapi,
+                dataType:'json',
+                success:function(data){
+                    showContant.html("");
+                    $.each(data, function(i) {
+                        showContant.append('\
+                            <tr>\
+                                <th scope="row">' + userId + '</th>\
+                                <td>' + userName + '</td>\
+                                <td>' + data[i].date + '</td>\
+                                <td>' + data[i].sdate + '</td>\
+                                <td>' + data[i].edate + '</td>\
+                            </tr>\
+                        ');
+                    });
+                },
+                error : function(err){
+                    console.log('err');
+                }
+            });
+            
+        }
+    });
+
+});   
+</script>
+</body>
+</html>

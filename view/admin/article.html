@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理</title>
+<%- include link.html %>
+</head>
+<body>
+<!-- 提示 -->
+<% if(success){ %><div class="am-alert am-alert-success" data-am-alert><button type="button" class="am-close">&times;</button><%= success %></div><% } %>
+<% if(error){ %><div class="am-alert am-alert-danger" data-am-alert><button type="button" class="am-close">&times;</button><%= error %></div><% } %>
+<%- include head.html %>
+<div class="am-cf admin-main">
+  <%- include menu.html %>
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">文章管理</strong> / <small>ARTICLE LIST</small>　　　
+      <a class="am-btn am-btn-secondary am-round" href="/addart"><span class="am-icon-plus-square-o"></span> 新增文章</a></div>
+    </div>
+
+    <hr/>
+    <div class="am-g am-padding">
+    <table class="am-table am-table-hover">
+        <thead>
+            <tr>
+                <th>标题</th>
+                <th>所属</th>
+                <th>发布时间</th>
+                <th>最后修改时间</th>
+                <th>是否显示</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(var i=0; i<doc.length; i++) { %>
+            <tr>
+                <td><%= doc[i].title %></td>
+                <td>
+                    <%
+                    for(var j=0;j<typedoc.length;j++){
+                        if( typedoc[j]._id == doc[i].cate ){
+                            %>
+                            <%=typedoc[j].name%>
+                            <%
+                        }
+                    }
+                    %>
+                </td>
+                <td style="font-size:12px;">
+                    <%= doc[i].dete.getFullYear() %>-<%= doc[i].dete.getMonth()+1 %>-<%= doc[i].dete.getDate() %> 
+                    <%= doc[i].dete.getHours() %>:<%= doc[i].dete.getMinutes() %>:<%= doc[i].dete.getSeconds() %>
+                </td>
+                <td style="font-size:12px;">
+                    <%= doc[i].updete.getFullYear() %>-<%= doc[i].updete.getMonth()+1 %>-<%= doc[i].updete.getDate() %> 
+                    <%= doc[i].updete.getHours() %>:<%= doc[i].updete.getMinutes() %>:<%= doc[i].updete.getSeconds() %>
+                </td>
+                <td>
+                <% if(doc[i].type==1) { %>
+                <span class="am-badge am-badge-success">显示</span>
+                <% }else{ %>
+                <span class="am-badge am-badge-danger">草稿</span>
+                <% } %>
+                </td>
+                <td width="200" data-id="<%= doc[i]._id %>">
+                    <a class="eidt_btn am-btn am-btn-default am-btn-xs am-round" href="/edit/<%= doc[i]._id %>"><span class="am-icon-edit"></span> 更改</a>
+                    <a class="am-btn am-btn-default am-btn-xs am-round" href="javascript:if( confirm('确定删除？') )window.location.href='/delart/<%= doc[i]._id %>';"><span class="am-icon-trash-o"></span> 删除</a>
+                </td>
+            </tr>
+            <% }%>            
+        </tbody>
+    </table>
+    <hr />
+    <ul class="am-pagination am-pagination-centered">
+
+      <% if(pageinfo.page!=1){ %>
+      <li><a href="?page=1">&laquo; 起始页</a></li>
+      <% } %>
+
+      <%
+      for(var prev=pageinfo.show; prev>=1; prev--){
+            if(pageinfo.page-prev>0){
+                %>
+                <li><a href="?page=<%= pageinfo.page-prev %>"><%= pageinfo.page-prev %></a></li>
+                <%
+            }
+        }
+      %>
+
+      <li class="am-active"><a href="?page=<%= pageinfo.page %>"><%= pageinfo.page %></a></li>
+
+      <%
+      for(var ne=1; ne<=pageinfo.show; ne++){
+            if(parseInt(pageinfo.page)+ne<pageinfo.countpage){
+                %>
+                <li><a href="?page=<%= parseInt(pageinfo.page)+ne %>"><%= parseInt(pageinfo.page)+ne %></a></li>
+                <%
+            }
+        }
+      %>
+
+      <% if(pageinfo.page!=pageinfo.countpage){ %>
+      <li><a href="?page=<%= pageinfo.countpage %>"><%= pageinfo.countpage %></a></li>
+      <li><a href="?page=<%= pageinfo.countpage %>">末页 &raquo;</a></li>
+      <% } %>
+
+      <li>共<%= pageinfo.count %>条</li>
+
+    </ul>
+    </div>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<%- include foot.html %>
+<script>
+$(function(){
+    $('.eidt_btn').click(function(event) {
+        /* Act on the event */
+        var obj = $(this).parent();
+        $('#edit_name').val( obj.prev().prev().text() );
+        $('#edit_des').val( obj.prev().text() );
+        $('#edit_id').val( obj.attr('data-id') );
+    });
+});
+</script>
+</body>
+</html>

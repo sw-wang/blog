@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= config.title %></title>
+<meta name="description" content="<%= config.description %>" />
+<meta name="keywords" content="<%= config.keywords %>" />
+<%- include link.html%>
+</head>
+
+<body>
+	<%- include menu.html%>
+	<div class="amz-banner">
+        <div class="amz-container am-scrollspy-init am-scrollspy-inview am-animation-scale-up" data-am-scrollspy="{animation: 'scale-up', repeat: false}">
+            <h1>博客首页</h1>
+            <p><%= config.description %></p>
+        </div>
+    </div>
+	<div class="container am-g">
+		<div class="am-u-sm-12 am-u-md-7 am-u-lg-7">
+			<ul class="list-ul">
+				<% for(var i=0; i<doc.length; i++) { %>
+				<li>
+					<h3><a href="/a/<%= doc[i]._id %>"><%= doc[i].title %></a></h3>
+					<hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>
+					<div class="c9"><%= doc[i].author %> 发布于 
+					<%= doc[i].dete.getFullYear() %>-<%= doc[i].dete.getMonth()+1 %>-<%= doc[i].dete.getDate() %> 
+                    <%= doc[i].dete.getHours() %>:<%= doc[i].dete.getMinutes() %>:<%= doc[i].dete.getSeconds() %> 
+					<%
+                    for(var j=0;j<type.length;j++){
+                        if( type[j]._id == doc[i].cate ){
+                            %>
+                            <a href="/list/<%= type[j]._id %>" class="am-badge am-badge-default am-round"><%=type[j].name%></a>
+                            <%
+                        }
+                    }
+                    %>
+					</div>
+					<blockquote>
+						<p class="c6 am-serif"><%= doc[i].description %></p>
+					</blockquote>
+					<div class="clear"></div>
+				</li>
+				<% } %>
+				
+			</ul>
+			<ul class="am-pagination am-pagination-centered">
+			  <% if(pageinfo.page!=1){ %>
+		      <li><a href="?page=1">&laquo; 起始页</a></li>
+		      <% } %>
+
+		      <%
+		      for(var prev=pageinfo.show; prev>=1; prev--){
+		            if(pageinfo.page-prev>0){
+		                %>
+		                <li><a href="?page=<%= pageinfo.page-prev %>"><%= pageinfo.page-prev %></a></li>
+		                <%
+		            }
+		        }
+		      %>
+
+		      <li class="am-active"><a href="?page=<%= pageinfo.page %>"><%= pageinfo.page %></a></li>
+
+		      <%
+		      for(var ne=1; ne<=pageinfo.show; ne++){
+		            if(parseInt(pageinfo.page)+ne<pageinfo.countpage){
+		                %>
+		                <li><a href="?page=<%= parseInt(pageinfo.page)+ne %>"><%= parseInt(pageinfo.page)+ne %></a></li>
+		                <%
+		            }
+		        }
+		      %>
+
+		      <% if(pageinfo.page!=pageinfo.countpage){ %>
+		      <li><a href="?page=<%= pageinfo.countpage %>"><%= pageinfo.countpage %></a></li>
+		      <li><a href="?page=<%= pageinfo.countpage %>">末页 &raquo;</a></li>
+		      <% } %>
+
+		      <li>共<%= pageinfo.count %>条</li>
+			</ul>
+		</div>
+		<div class="am-u-sm-12 am-u-md-1 am-u-lg-1"></div>
+		<div class="am-u-sm-12 am-u-md-4 am-u-lg-4"><%- include ad.html%></div>
+	</div>
+	<%- include foot.html%>
+	<script language="javascript">
+	//首页标识
+	$(function(){
+		$('.am-nav>li:eq(0)').addClass('am-active');
+	})
+	</script>
+</body>
+</html>

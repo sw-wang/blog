@@ -1,0 +1,21 @@
+	<header class="am-topbar am-topbar-fixed-top">
+	<div class="amz-container">
+		<h1 class="am-topbar-brand"><a href="/"><%= config.title %></a></h1>
+		<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+		<div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+			<div class="am-topbar-right">
+				<ul class="am-nav am-nav-pills am-topbar-nav">
+				  <li><a href="/">首页</a></li>
+				  <% for(var i=0; i<type.length; i++) { %>
+					<li><a href="/list/<%= type[i]._id %>"><%= type[i].name %></a></li>
+				  <% } %>				  
+				</ul>
+				<form class="am-topbar-form am-topbar-left am-form-inline" role="search" method="get" action="/search">
+				  <div class="am-form-group">
+				    <input type="text" class="am-form-field am-input-sm" name="searchtext" placeholder="搜索">
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+	</header>

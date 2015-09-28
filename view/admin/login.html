@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+    <%- include ../link.html %>
+        <style>
+        .container {
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 600px;
+            margin-top: 10%;
+        }
+        
+        #vld-tooltip {
+            position: absolute;
+            z-index: 1000;
+            padding: 5px 10px;
+            background: #F37B1D;
+            min-width: 150px;
+            color: #fff;
+            transition: all 0.15s;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+            display: none;
+        }
+        
+        #vld-tooltip:before {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -8px;
+            content: "";
+            border-width: 0 8px 8px;
+            border-color: transparent transparent #F37B1D;
+            border-style: none inset solid;
+        }
+        </style>
+</head>
+
+<body>
+    <div class="container">
+<% if(success){ %><div class="am-alert am-alert-success" data-am-alert><button type="button" class="am-close">&times;</button><%= success %></div><% } %>
+<% if(error){ %><div class="am-alert am-alert-danger" data-am-alert><button type="button" class="am-close">&times;</button><%= error %></div><% } %>
+                <form action="/signin" method="post" class="am-form" id="form-with-tooltip">
+                    <fieldset>
+                        <legend><span class="am-icon-user-secret"></span> 登录 Login</legend>
+                        <div class="am-form-group">
+                            <label for="doc-vld-name-2-0">用户名：</label>
+                            <input name="username" type="text" id="doc-vld-name-2-0" minlength="3" placeholder="输入用户名（至少 3 个字符）" required/>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="doc-vld-pwd-1-0">密码：</label>
+                            <input name="password" type="password" id="doc-vld-pwd-1-0" placeholder="请输入密码" required data-foolish-msg="请输入密码！" />
+                        </div>
+                        <button class="am-btn am-btn-secondary" type="submit">提交</button>
+                    </fieldset>
+                </form>
+    </div>
+    <script>
+    $(function() {
+        var $form = $('#form-with-tooltip');
+        var $tooltip = $('<div id="vld-tooltip">提示信息！</div>');
+        $tooltip.appendTo(document.body);
+
+        $form.validator();
+
+        var validator = $form.data('amui.validator');
+
+        $form.on('focusin focusout', '.am-form-error input', function(e) {
+            if (e.type === 'focusin') {
+                var $this = $(this);
+                var offset = $this.offset();
+                var msg = $this.data('foolishMsg') || validator.getValidationMessage($this.data('validity'));
+
+                $tooltip.text(msg).show().css({
+                    left: offset.left + 150,
+                    top: offset.top + $(this).outerHeight() - 180
+                });
+            } else {
+                $tooltip.hide();
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

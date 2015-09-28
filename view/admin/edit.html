@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理</title>
+<%- include link.html %>
+<script type="text/javascript" charset="utf-8" src="/uedit/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/uedit/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/uedit/lang/zh-cn/zh-cn.js"> </script>
+</head>
+<body>
+<%- include head.html %>
+<div class="am-cf admin-main">
+  <%- include menu.html %>
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">修改文章</strong> / <small>EDIT ARTICLE</small></div>
+    </div>
+
+    <hr/>
+    <div class="am-g am-padding">
+    <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8"></div>
+    <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+        <form class="am-form am-form-horizontal" action="/admin/addartp" method="post">
+
+          <div class="am-form-group">
+            <label for="title" class="am-u-sm-3 am-form-label">标题</label>
+            <div class="am-u-sm-9">
+              <input id="title" name="title" type="text" value="<%=doc.title%>">
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="keywords" class="am-u-sm-3 am-form-label">关键字</label>
+            <div class="am-u-sm-9">
+              <input id="keywords" name="keywords" type="text" value="<%=doc.keyword%>">
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="description" class="am-u-sm-3 am-form-label">描述</label>
+            <div class="am-u-sm-9">
+              <textarea id="description" name="description" class="" rows="2" id="user-intro"><%=doc.description%></textarea>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="author" class="am-u-sm-3 am-form-label">作者</label>
+            <div class="am-u-sm-9">
+              <input id="author" name="author" type="text" value="<%=doc.author%>">
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="cate" class="am-u-sm-3 am-form-label">所属类别</label>
+            <div class="am-u-sm-9">
+              <select name="cate" id="cate" class="am-input-sm">
+                <%
+                for(var j=0;j<typedoc.length;j++){
+                    if( typedoc[j]._id == doc.cate ){
+                %>
+                <option value="<%= typedoc[j]._id %>" selected=""><%= typedoc[j].name %></option>
+                <%
+                    }else{
+                %>
+                <option value="<%= typedoc[j]._id %>"><%= typedoc[j].name %></option>
+                <%
+                    }
+                }
+                %>
+              </select>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="cate" class="am-u-sm-3 am-form-label">是否显示</label>
+            <div class="am-u-sm-9">
+              <select name="type" id="type" class="am-input-sm">
+                <% if(doc.type==1){ %>
+                <option value="1" selected="">显示</option>
+                <option value="2">草稿</option>
+                <% }else{ %>
+                <option value="1">显示</option>
+                <option value="2" selected="">草稿</option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="contant" class="am-u-sm-3 am-form-label">内容</label>
+            <div class="am-u-sm-9">
+            <script id="editor" type="text/plain" style="width:100%;height:300px;" name="contant"><%- doc.contant %></script>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <div class="am-u-sm-9 am-u-sm-push-3">
+              <input name="id" type="hidden" value="<%=doc._id%>" />
+              <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<%- include foot.html %>
+<script>
+var ue = UE.getEditor('editor');
+</script>
+</body>
+</html>

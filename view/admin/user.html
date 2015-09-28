@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理</title>
+<%- include link.html %>
+</head>
+<body>
+<!-- 提示 -->
+<% if(success){ %><div class="am-alert am-alert-success" data-am-alert><button type="button" class="am-close">&times;</button><%= success %></div><% } %>
+<% if(error){ %><div class="am-alert am-alert-danger" data-am-alert><button type="button" class="am-close">&times;</button><%= error %></div><% } %>
+<%- include head.html %>
+<div class="am-cf admin-main">
+  <%- include menu.html %>
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">安全设置</strong> / <small>USER SET</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+
+      <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8"></div>
+
+      <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+        <form class="am-form am-form-horizontal" action="admin/user" method="post">
+
+          <div class="am-form-group">
+            <label for="title" class="am-u-sm-3 am-form-label">用户名</label>
+            <div class="am-u-sm-9">
+              <input id="title" name="username" type="text" value="<%= username %>">
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="keywords" class="am-u-sm-3 am-form-label">旧密码</label>
+            <div class="am-u-sm-9">
+              <input id="keywords" name="oldps" type="password" value="">
+              <small>修改内容必须填写此项</small>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="description" class="am-u-sm-3 am-form-label">新密码</label>
+            <div class="am-u-sm-9">
+              <input type="password" name="nps" />
+              <small>留空表示不修改</small>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="description" class="am-u-sm-3 am-form-label">确认新密码</label>
+            <div class="am-u-sm-9">
+              <input type="password" name="rnps" />
+            </div>
+          </div>
+          
+          <div class="am-form-group">
+            <div class="am-u-sm-9 am-u-sm-push-3">
+              <input name="userid" type="hidden" value="55d14b4b7e0de292d9d87b82" />
+              <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- content end -->
+
+</div>
+<%- include foot.html %>
+</body>
+</html>

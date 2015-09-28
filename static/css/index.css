@@ -1,0 +1,54 @@
+ul,li,h3{margin:0px;padding: 0px; list-style: none;}
+.amz-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    max-width: 1200px;
+}
+.container{
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    margin-top: 40px;
+}
+.amz-banner{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: #F5F5F5 url(../img/5-120601092219-50.png) repeat;
+}
+.am-nav-pills>li {
+    margin-right: 20px;
+}
+.c9{
+    color: #999;
+    font-size: 14px;
+}
+.c6{
+    color: #666;
+    font-size: 14px;
+}
+.more-link{
+    float: right;
+    margin-top: -20px;
+}
+.list-ul{
+    margin-top: -60px;
+}
+.list-ul li{
+    margin-top: 60px;
+}
+.clear{
+    clear: both;
+}
+.am-pagination{
+    margin-top: 80px;
+}
+footer{
+    margin-top: 80px;
+}
+.am-list, .am-topbar{
+    margin-bottom: 0px;
+}
+.tr{text-align: right;}
+.artcont img{max-width: 100%;}

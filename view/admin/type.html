@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理</title>
+<%- include link.html %>
+</head>
+<body>
+<!-- 提示 -->
+<% if(success){ %><div class="am-alert am-alert-success" data-am-alert><button type="button" class="am-close">&times;</button><%= success %></div><% } %>
+<% if(error){ %><div class="am-alert am-alert-danger" data-am-alert><button type="button" class="am-close">&times;</button><%= error %></div><% } %>
+<%- include head.html %>
+<div class="am-cf admin-main">
+  <%- include menu.html %>
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">文章类别</strong> / <small>ARTICLE TYPE</small></div>
+      <button type="button" class="am-btn am-btn-secondary am-round" data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 1}" style="float:right;">+新增一级类别</button>
+    </div>
+
+    <hr/>
+    <div class="am-g am-padding">
+    
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">新增一级类别
+          <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <hr />
+        <div class="am-modal-bd">
+            <div class="am-g">
+              <div class="am-u-sm-12">
+                <form class="am-form am-form-horizontal" action="admin/addtype" method="post">
+                  <div class="am-form-group">
+                    <label for="title" class="am-u-sm-2 am-form-label">名称</label>
+                    <div class="am-u-sm-10">
+                      <input id="title" name="name" type="text" value="">
+                    </div>
+                  </div>
+
+                  <div class="am-form-group">
+                    <label for="description" class="am-u-sm-2 am-form-label">描述</label>
+                    <div class="am-u-sm-10">
+                      <textarea id="description" name="description" class="" rows="5" id="user-intro"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="am-form-group">
+                    <div>
+                      <button type="submit" class="am-btn am-btn-primary">保存</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>          
+        </div>
+      </div>
+    </div>
+    <!-- 增加子类 -->
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-2">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">更改
+          <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <hr />
+        <div class="am-modal-bd">
+            <div class="am-g">
+              <div class="am-u-sm-12">
+                <form class="am-form am-form-horizontal" action="admin/addtype" method="post">
+                  <div class="am-form-group">
+                    <label for="title" class="am-u-sm-2 am-form-label">名称</label>
+                    <div class="am-u-sm-10">
+                      <input id="edit_name" name="name" type="text" value="">
+                    </div>
+                  </div>
+
+                  <div class="am-form-group">
+                    <label for="description" class="am-u-sm-2 am-form-label">描述</label>
+                    <div class="am-u-sm-10">
+                      <textarea name="description" class="" rows="5" id="edit_des"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="am-form-group">
+                    <div>
+                      <input id="edit_id" type="hidden" name="editid" value="" />
+                      <button type="submit" class="am-btn am-btn-primary">保存</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>          
+        </div>
+      </div>
+    </div>
+
+    <table class="am-table am-table-hover">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>描述</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(var i=0; i<doc.length; i++) { %>
+            <tr>
+                <td><%= doc[i].name %></td>
+                <td><%= doc[i].description %></td>
+                <td width="300" data-id="<%= doc[i]._id %>">
+                    <button class="eidt_btn am-btn am-btn-success am-btn-xs am-round" data-am-modal="{target: '#doc-modal-2', closeViaDimmer: 1}"><span class="am-icon-edit"></span> 更改</button>
+                    <a class="am-btn am-btn-danger am-btn-xs am-round" href="javascript:if( confirm('确定删除？') )window.location.href='/deltype/<%= doc[i]._id %>';"><span class="am-icon-trash-o"></span> 删除</a>
+                    <a href="/top/<%= doc[i]._id %>" class="am-btn am-btn-warning am-btn-xs am-round"><span class="am-icon-arrow-up"></span> 置顶</a>
+                </td>
+            </tr>
+            <% }%>            
+        </tbody>
+    </table>
+    </div>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<%- include foot.html %>
+<script>
+$(function(){
+    $('.eidt_btn').click(function(event) {
+        /* Act on the event */
+        var obj = $(this).parent();
+        $('#edit_name').val( obj.prev().prev().text() );
+        $('#edit_des').val( obj.prev().text() );
+        $('#edit_id').val( obj.attr('data-id') );
+    });
+});
+</script>
+</body>
+</html>
