@@ -32,5 +32,10 @@ module.exports = function(app) {
 
     // 测试接口
     app.post('/port',Index.port); 
+
+    // 404
+    app.get('*', function(req, res){
+        res.render('404.html')
+    });
     
 };
