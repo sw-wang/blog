@@ -10,7 +10,7 @@ module.exports = function(app) {
     //后台
     app.get('/login', Admin.login);
 
-    app.get('/admin', Admin.signinRequired,Admin.index); //后台首页、网站配置信息
+    app.get('/admin', Admin.signinRequired,Admin.index); //后台首页、网站配置信息 test
     app.get('/user', Admin.signinRequired,Admin.user); //安全设置页面
     app.get('/arttype', Admin.signinRequired,Admin.arttype); //文章类别页面
     app.get('/logout', Admin.logout); //退出
