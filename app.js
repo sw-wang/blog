@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'view'));
 app.set('view engine', 'html');
 app.engine('.html', require('ejs').__express);
 app.use(express.static(path.join(__dirname, 'static')));
-app.use(cookieParser()); // 使用cookies中间件
+app.use(cookieParser()); // 使用cookies中间件123
 app.use(flash());
 app.use(session({
     secret: 'blog',
