@@ -24,7 +24,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 6
     },
-    rolling: true, //可持续活动
+    rolling: true, //可持续活动s
     store: new MongoStore({
         url: dbUrl,
         collection: 'sessions'
