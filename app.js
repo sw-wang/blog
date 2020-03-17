@@ -38,7 +38,7 @@ app.use("/uedit/ue", ueditor(path.join(__dirname, 'static'), function(req, res, 
         var date = new Date();
         var imgname = req.ueditor.filename;
         var img_url = '/upload/';
-        res.ue_up(img_url); //你只要输入要保存的地址 。保存操作交给ueditor来做
+        res.ue_up(img_url); //你只要输入要保存的地址 。保存操作交给ueditor来做r
     }
     else if (req.query.action === 'listimage') {
         var dir_url = '/upload/';
